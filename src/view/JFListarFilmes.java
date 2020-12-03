@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
+import java.awt.BorderLayout; 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import model.bean.filme;
 import model.dao.FilmeDAO;
+
 import javax.swing.JButton;
 
 public class JFListarFilmes extends JFrame {
@@ -80,6 +81,8 @@ public class JFListarFilmes extends JFrame {
 		JButton btnDeletar = new JButton("Deletar Filme");
 		btnDeletar.setBounds(322, 343, 102, 23);
 		contentPane.add(btnDeletar);
+		
+		readJTable();
 	}
 	
 		public void readJTable() {
@@ -87,16 +90,14 @@ public class JFListarFilmes extends JFrame {
 			DefaultTableModel modelo = (DefaultTableModel) jtFilme.getModel() ;
 			modelo.setNumRows(0);
 			FilmeDAO fdao = new FilmeDAO();
-			for (filme f : fdao.read());{
-				
+			for (filme f : fdao.read()) {
 				modelo.addRow(new Object[] {
 				f.getIdFilme(),
 				f.getTitulo(),
 				f.getCategoria(),
 				f.getTempo()
-						
-						
 				});
+	
 				}
 			}
 		}
