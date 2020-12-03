@@ -2,7 +2,10 @@ package model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -43,13 +46,46 @@ public class FilmeDAO {
 			
 			
 			
-			
 		}
 	}
 
 	public static Connection getCon() {
 		return con;
 	}
+
+	public List<filme> read(){
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		List<filme> filmes = new ArrayList<>();
+		
+		try {
+			stmt = con.prepareStatement("SELECT + FROM filme;");
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				filme f = new filme();
+				f.setIdFilme(rs.getInt("idFilme"));
+				f.setTitulo(rs.getString("titulo"));
+				f.setTempo(rs.getInt("tempo"));
+				f.setImg3d(rs.getBoolean("img3d"));
+				f.setDublado(rs.getBoolean("dublado"));
+				f.setSinopse(rs.getString("sinopse"));
+				f.setCategoria(rs.getString("categoria"));
+				filmes.add(f);
+			}
+			
+			
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao buscar informações no BD: " + e);
+			e.printStackTrace();
+		}finally {
+			
+			ConnectionFactory.closeConnection(con, stmt, rs);
+		}
+				return filmes;
+		
+	}
+
 }
 
 
