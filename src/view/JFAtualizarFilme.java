@@ -1,37 +1,34 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import model.bean.filme;
 import model.dao.FilmeDAO;
 
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.JLayeredPane;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-
-public class JFCadastroFilme extends JFrame {
-
-	/**
-	 * 
-	 */
+public class JFAtualizarFilme extends JFrame {
+	
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private JTextField Titul;
 	private JTextField categor;
 	private JTextField sinops;
+	private JPanel contentPane;
+	
+	private static int id;
 
 	/**
 	 * Launch the application.
@@ -40,19 +37,23 @@ public class JFCadastroFilme extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JFCadastroFilme frame = new JFCadastroFilme();
+					JFAtualizarFilme frame = new JFAtualizarFilme(id);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+
 			}
 		});
 	}
 
+
 	/**
 	 * Create the frame.
+	 * @param i 
 	 */
-	public JFCadastroFilme() {
+
+	public JFAtualizarFilme(int id) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -60,14 +61,25 @@ public class JFCadastroFilme extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Cadastrar Filme");
-		lblNewLabel.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 15));
+		JLabel lblNewLabel = new JLabel("Alterar Filme");
 		lblNewLabel.setBounds(10, 11, 125, 26);
+		lblNewLabel.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 15));
 		contentPane.add(lblNewLabel);
 		
+		FilmeDAO fdao = new FilmeDAO();
+		filme f = fdao.read(id);
+		
+		JLabel lblNewLabel_1 = new JLabel("ID: ");
+		lblNewLabel_1.setBounds(142, 19, 46, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblId = new JLabel("New label");
+		lblId.setBounds(159, 19, 46, 14);
+		contentPane.add(lblId);
+		
 		JLabel titulo = new JLabel("T\u00EDtulo");
-		titulo.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		titulo.setBounds(10, 46, 46, 14);
+		titulo.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		contentPane.add(titulo);
 		
 		Titul = new JTextField();
@@ -76,13 +88,13 @@ public class JFCadastroFilme extends JFrame {
 		Titul.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Sinopse");
-		lblNewLabel_2.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		lblNewLabel_2.setBounds(10, 107, 57, 14);
+		lblNewLabel_2.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		contentPane.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Categoria");
-		lblNewLabel_3.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		lblNewLabel_3.setBounds(121, 46, 57, 14);
+		lblNewLabel_3.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		contentPane.add(lblNewLabel_3);
 		
 		categor = new JTextField();
@@ -103,23 +115,23 @@ public class JFCadastroFilme extends JFrame {
 		imagem.add(rdbtn2d);
 		
 		JSpinner Duracao = new JSpinner();
-		Duracao.setToolTipText("Dura\u00E7\u00E3o");
 		Duracao.setBounds(10, 219, 29, 20);
+		Duracao.setToolTipText("Dura\u00E7\u00E3o");
 		contentPane.add(Duracao);
 		
 		JLabel lblNewLabel_4 = new JLabel("Dura\u00E7\u00E3o");
-		lblNewLabel_4.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		lblNewLabel_4.setBounds(43, 222, 57, 14);
+		lblNewLabel_4.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 13));
 		contentPane.add(lblNewLabel_4);
 		
 		JRadioButton rdbtnDub = new JRadioButton("Dub");
-		rdbtnDub.setFont(new Font("Source Serif Pro Semibold", Font.PLAIN, 12));
 		rdbtnDub.setBounds(106, 218, 57, 23);
+		rdbtnDub.setFont(new Font("Source Serif Pro Semibold", Font.PLAIN, 12));
 		contentPane.add(rdbtnDub);
 		
 		JRadioButton rdbtnLeg = new JRadioButton("Leg");
-		rdbtnLeg.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
 		rdbtnLeg.setBounds(179, 218, 57, 23);
+		rdbtnLeg.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
 		contentPane.add(rdbtnLeg);
 		
 		ButtonGroup audio = new ButtonGroup();
@@ -130,7 +142,26 @@ public class JFCadastroFilme extends JFrame {
 		btnNewButton.setBounds(242, 218, 89, 23);
 		contentPane.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Cadastrar");
+		lblId.setText(String.valueOf(f.getIdFilme()));
+		Titul.setText(f.getTitulo());
+		sinops.setText(f.getSinopse());
+	    categor.setText(f.getCategoria());
+		Duracao.setValue(f.getTempo());
+		
+		if(f.isImg3d()) {
+			rdbtn3d.setSelected(true);
+		} else {
+			rdbtn2d.setSelected(true);
+		}
+		
+		if(f.isDublado()) {
+			rdbtnDub.setSelected(true);
+		} else {
+			rdbtnLeg.setSelected(true);
+		}
+		
+		JButton btnNewButton_1 = new JButton("Alterar");
+		btnNewButton_1.setBounds(341, 218, 89, 23);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				filme f = new filme();
@@ -157,7 +188,6 @@ public class JFCadastroFilme extends JFrame {
 				dao.create(f);
 			}
 		});
-		btnNewButton_1.setBounds(341, 218, 89, 23);
 		contentPane.add(btnNewButton_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -168,5 +198,8 @@ public class JFCadastroFilme extends JFrame {
 		sinops.setBounds(10, 120, 382, 58);
 		contentPane.add(sinops);
 		sinops.setColumns(10);
+		
+
 	}
-}
+		
+	}

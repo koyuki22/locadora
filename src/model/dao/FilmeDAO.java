@@ -52,7 +52,7 @@ public class FilmeDAO {
 	public static Connection getCon() {
 		return con;
 	}
-
+    //cadastrar
 	public List<filme> read(){
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
@@ -85,7 +85,90 @@ public class FilmeDAO {
 				return filmes;
 		
 	}
+	
+	//listar
+	public filme read(int idFilme) {
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		filme f = new filme();
+		
+		try {
+			stmt = con.prepareStatement("SELECT * FROM movie WHERE id=? LIMIT 1");
+			stmt.setInt(1, idFilme);
+			rs = stmt.executeQuery();
+			
+			if(rs != null && rs.next()) {
+				f.setIdFilme(rs.getInt("idFilme"));
+				f.setTitulo(rs.getString("titulo"));
+				f.setTempo(rs.getInt("tempo"));
+				f.setImg3d(rs.getBoolean("img3d"));
+				f.setDublado(rs.getBoolean("dublado"));
+				f.setSinopse(rs.getString("sinopse"));
+				f.setCategoria(rs.getString("categoria"));
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt, rs);
+		}
+		
+		return f;
+	}
+	
+	//alterar
+	public void update(filme f) {
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement("UPDATE movie SET titulo=?, =?, dublado=?, categoria=?, img3d=?, sinopse=? WHERE idfilme=?");
+			
+			stmt.setString(2, f.getTitulo());
+			stmt.setInt(1, f.getIdFilme());
+			stmt.setString(6, f.getSinopse());
+			stmt.setString(7, f.getCategoria());
+			stmt.setBoolean(4, f.isImg3d());
+			stmt.setBoolean(5, f.isDublado());
+			stmt.setInt(3, f.getTempo());
+			
+			stmt.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Mudanças salvas com sucesso");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao atualizar:" + e);
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt);
+		}
+		
+	}
 
+	
+	
+	public void remove(int idFilme) {
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement("DELETE FROM movie WHERE id=?");
+			
+			stmt.setInt(1, idFilme);
+			stmt.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Filme excluído com sucesso!");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao atualizar:" + e);
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt);
+		}
+		
+	}
+	
 }
 
 
