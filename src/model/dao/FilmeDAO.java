@@ -22,7 +22,7 @@ public class FilmeDAO {
 		
 		try {
 			
-			stmt = con.prepareStatement("INSERT INTO FILME(titulo, categoria, dub, 3d, duracao, sinopse) VALUES (?,?,?,?,?,?)");
+			stmt = con.prepareStatement("INSERT INTO filme(titulo, categoria, dub, 3d, duracao, sinopse) VALUES" + "(?,?,?,?,?,?)");
 			
 			stmt.setString(1, f.getTitulo());
 			stmt.setString(2, f.getCategoria());
@@ -94,10 +94,9 @@ public class FilmeDAO {
 		filme f = new filme();
 		
 		try {
-			stmt = con.prepareStatement("SELECT * FROM movie WHERE id=? LIMIT 1");
+			stmt = con.prepareStatement("SELECT * FROM filme WHERE idFilme=? LIMIT 1;");
 			stmt.setInt(1, idFilme);
 			rs = stmt.executeQuery();
-			
 			if(rs != null && rs.next()) {
 				f.setIdFilme(rs.getInt("idFilme"));
 				f.setTitulo(rs.getString("titulo"));
@@ -110,7 +109,6 @@ public class FilmeDAO {
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt, rs);
@@ -125,7 +123,7 @@ public class FilmeDAO {
 		PreparedStatement stmt = null;
 		
 		try {
-			stmt = con.prepareStatement("UPDATE movie SET titulo=?, =?, dublado=?, categoria=?, img3d=?, sinopse=? WHERE idfilme=?");
+			stmt = con.prepareStatement("UPDATE filme SET titulo=?, =?, dublado=?, categoria=?, img3d=?, sinopse=? WHERE idfilme=?");
 			
 			stmt.setString(2, f.getTitulo());
 			stmt.setInt(1, f.getIdFilme());
@@ -149,20 +147,18 @@ public class FilmeDAO {
 
 	
 	
-	public void remove(int idFilme) {
+	public void delete (filme f) {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		
 		try {
-			stmt = con.prepareStatement("DELETE FROM movie WHERE id=?");
-			
-			stmt.setInt(1, idFilme);
+			stmt = con.prepareStatement("DELETE FROM filme WHERE idFilme=?");
+			stmt.setInt(1, f.getIdFilme());
 			stmt.executeUpdate();
-			
 			JOptionPane.showMessageDialog(null, "Filme excluído com sucesso!");
+			
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao atualizar:" + e);
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Erro ao excluir: "+ e);
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
